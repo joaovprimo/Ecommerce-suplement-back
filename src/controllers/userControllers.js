@@ -18,6 +18,7 @@ const signUpSchema = joi.object({
 // Controlles;
 export async function loginUser(req, res) {
   const { email, password } = req.body;
+  console.log(email, password)
 
   const validation = loginSchema.validate(req.body, { abortEarly: false });
   if (validation.error) {
@@ -28,21 +29,24 @@ export async function loginUser(req, res) {
 
   try {
     const user = await db.collection("users").findOne({ email });
-    if (user && bcrypt.compareSync(password, user.password)) {
+    const password = user ? bcrypt.compareSync(password, user.password) :false;
+    if (user && password) {
+     await db.collection('session').deleteMany({
+        userId: user._id
+      })
       const token = uuid();
-
-await db.collection("session").insertOne({
-  token,
-  userId: user._id
-})
-
-      res.status(201).send(token);
-
-     
+      await db.collection("session").insertOne({
+        token,
+        userId: user._id
+      })
+     return  res.status(201).send({nome:user.name, token});
     } else {
       return res.status(401).send("Senha ou email incorretos");
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+      return res.sendStatus(error);
+  }
 }
 
 export async function signUpUser(req, res) {
@@ -56,14 +60,14 @@ export async function signUpUser(req, res) {
   }
 
   try {
-    await db.collection("users").insertOne({
+    const user = await db.collection("users").insertOne({
       name,
       email,
       password: bcrypt.hashSync(password, 10)
     });
 
     
-    res.sendStatus(201);
+    res.send(user);
   } catch (error) {
     console.log(error.message);
   }

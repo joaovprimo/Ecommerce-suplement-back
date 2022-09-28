@@ -13,17 +13,17 @@ const server = express();
 
 
 server.use(cors());
-server.use(json());
+server.use(express.json());
 
 // Rotas;
-server.post("/", loginUser);
-server.post("/sign-up", signUpUser);
+server.post("/singin", loginUser);
+server.post("/signup", signUpUser);
 server.get("/cart", getListSelected);
 server.delete("/delete", deleteSelected)
 
 //Rotas Menu
 server.use(routesHome);
 
-server.listen(PORT, () => {
+server.listen(5002, () => {
   console.log(`Servidor funcionandona na porta ${PORT}`);
 });
