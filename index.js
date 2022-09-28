@@ -17,7 +17,7 @@ server.use(express.json());
 
 // Rotas;
 server.post("/singin", loginUser);
-server.post("/signup", signUpUser);
+server.post("/singup", signUpUser);
 server.get("/cart", getListSelected);
 server.delete("/delete", deleteSelected)
 
