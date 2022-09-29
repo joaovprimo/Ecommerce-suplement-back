@@ -38,7 +38,6 @@ async function postProductBuying(req, res){
 const {_id, img, value, name, description} = req.body;
 
 const user = res.locals.user;
-// console.log(user._id);
 
 const objSelected = {
   idProduct:_id,
@@ -46,15 +45,15 @@ const objSelected = {
   description: description,
   name: name, 
   value: value,
-  img: img
-
-
+  img: img, 
+  
 }
 
 try{
+  
   const selected = await db.collection('productsSelected').insertOne(objSelected);
   const selecteds = await db.collection('productsSelected').find({userId:user._id}).toArray();
-  // console.log(selecteds);
+   
 
   return res.status(201).send(selecteds);
 }catch(error){

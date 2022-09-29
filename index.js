@@ -19,7 +19,7 @@ server.use(express.json());
 server.post("/singin", loginUser);
 server.post("/singup", signUpUser);
 server.get("/cart", getListSelected);
-server.delete("/delete", deleteSelected)
+
 
 //Rotas Menu
 server.use(routesHome);
